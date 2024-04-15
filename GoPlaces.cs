@@ -1,43 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GoPlaces : MonoBehaviour
+public class MoverByPoints : MonoBehaviour
 {
-    public float _float;
+    [SerializeField] private float _speed;
+    [SerializeField] private Transform _way;
 
+    private Transform[] _wayPoints;
+    private int _currentWayPoint;
 
-
-    public Transform AllPlacespoint;
-    Transform[] arrayPlaces;
-    private int NumberOfPlaceInArrayPlaces;
-    void Start() {
-        arrayPlaces = new Transform[AllPlacespoint.childCount];
-
-        for (int abcd = 0; abcd < AllPlacespoint.childCount; abcd++)
-            arrayPlaces[abcd] = AllPlacespoint.GetChild(abcd).GetComponent<Transform>();
-        }
-    // Update is called once per frame
-    public void Update()
+    private void Start()
     {
-        var _pointByNumberInArray= arrayPlaces[NumberOfPlaceInArrayPlaces];
-        transform.position   =  Vector3.MoveTowards(transform.position , _pointByNumberInArray.position, _float * Time.deltaTime);
+        _wayPoints = new Transform[_way.childCount];
 
-
-          if (transform.position == _pointByNumberInArray.position)  NextPlaceTakerLogic();
-    }
-    public Vector3 NextPlaceTakerLogic(){
-        NumberOfPlaceInArrayPlaces++;
-
-            if (NumberOfPlaceInArrayPlaces == arrayPlaces.Length)
-                NumberOfPlaceInArrayPlaces  = 0;
-
-        var thisPointVector = arrayPlaces[NumberOfPlaceInArrayPlaces].transform.position;
-        transform.forward = thisPointVector - transform.position;
-        return thisPointVector;
-
-        
+        for (int i = 0; i < _way.childCount; i++)
+        {
+            _wayPoints[i] = _way.GetChild(i);
+        }
     }
 
+    private void Update()
+    {
+        if (transform.position == _wayPoints[_currentWayPoint].position)
+        {
+            _currentWayPoint = (_currentWayPoint + 1) % _wayPoints.Length;
+        }
 
+        transform.position = Vector3.MoveTowards(transform.position, _wayPoints[_currentWayPoint].position, _speed * Time.deltaTime);
+    }
 }
