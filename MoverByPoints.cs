@@ -12,7 +12,7 @@ public class MoverByPoints : MonoBehaviour
     {
         _wayPoints = new Transform[_way.childCount];
 
-        for (int i = 0; i < _way.childCount; i++)
+        for (int i = 0; i < _wayPoints.Length; i++)
         {
             _wayPoints[i] = _way.GetChild(i);
         }
@@ -22,7 +22,7 @@ public class MoverByPoints : MonoBehaviour
     {
         if (transform.position == _wayPoints[_currentWayPoint].position)
         {
-            _currentWayPoint = (_currentWayPoint + 1) % _wayPoints.Length;
+            _currentWayPoint = (++_currentWayPoint) % _wayPoints.Length;
         }
 
         transform.position = Vector3.MoveTowards(transform.position, _wayPoints[_currentWayPoint].position, _speed * Time.deltaTime);

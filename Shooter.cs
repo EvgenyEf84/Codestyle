@@ -1,11 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Shooter : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private GameObject _prefab;
+    [SerializeField] private Rigidbody _prefab;
     [SerializeField] private Transform _target;
     [SerializeField] float _delay;
 
@@ -21,12 +20,12 @@ public class Shooter : MonoBehaviour
         while (enabled)
         {
             var direction = (_target.position - transform.position).normalized;
-            var NewBullet = Instantiate(_prefab, transform.position, Quaternion.identity);
+            Rigidbody newBullet = Instantiate(_prefab, transform.position , Quaternion.identity);
 
-            NewBullet.GetComponent<Rigidbody>().transform.up = direction;
-            NewBullet.GetComponent<Rigidbody>().velocity = direction * _speed * Time.deltaTime;
+            newBullet.transform.up = direction;
+            newBullet.velocity = direction * _speed*Time.deltaTime;
 
-            yield return wait;
-        }
+            yield return wait;            
+        }       
     }
 }
